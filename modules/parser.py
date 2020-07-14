@@ -1,12 +1,11 @@
 import json
 import csv
-import sys
 from xml.etree import ElementTree
 
 #returns two values data, type ('json', 'csv', 'xml', 'txt')
 #JSON returns Dict
 #XML  returns ElementTree
-#CSV  returns Dict
+#CSV  returns 2D Array/List
 #TXT  returns String
 
 def parseFile(file):
@@ -23,7 +22,7 @@ def parseFile(file):
             try:
                 dialect = csv.Sniffer().sniff(file.read(), delimiters=",")
                 file.seek(0)
-                data = csv.DictReader(file, fieldnames=None)
+                data = list(csv.reader(file))
                 return data, 'csv'
             except:
                 file.seek(0)
