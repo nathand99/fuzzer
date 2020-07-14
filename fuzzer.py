@@ -1,15 +1,15 @@
 #!/usr/bin/python3
-import sys
+import sys, os
 import json
 import csv
 from xml.etree import ElementTree
 from pwn import *
 from modules.parser import parseFile
 
-try:
-    p = process(sys.argv[1])
-except:
-    exit("Couldn't run or find binary please use format: python fuzzer.py <binary> [supplied input]")
+binaryName = sys.argv[1]
+
+if not os.path.isfile(binaryName):
+    exit("Couldn't find binary please use format: python fuzzer.py <binary> [supplied input]")
 
 if (len(sys.argv) > 2):
     try:
@@ -18,3 +18,10 @@ if (len(sys.argv) > 2):
         print("Supplied input of type: {}".format(fileType))
     except:
         print("Couldn't read supplied input. Continuing without...")
+
+
+try:
+    p = process(binaryName)
+    #TODO
+except Exception as e:
+    exit("Couldn't run binary") #TODO
