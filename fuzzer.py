@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 import sys
 import json
+import csv
+from xml.etree import ElementTree
 from pwn import *
 from modules.parser import parseFile
 
