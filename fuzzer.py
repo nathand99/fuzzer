@@ -3,8 +3,8 @@ import sys, os
 import json
 import csv
 from xml.etree import ElementTree
-from pwn import *
-from modules.parser import parseFile
+from pwn import process
+from modules import *
 
 binaryName = sys.argv[1]
 

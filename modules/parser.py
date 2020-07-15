@@ -20,7 +20,7 @@ def parseFile(file):
         except:
             file.seek(0)
             try:
-                dialect = csv.Sniffer().sniff(file.read(), delimiters=",")
+                csv.Sniffer().sniff(file.read(), delimiters=",") #checks csv format
                 file.seek(0)
                 data = list(csv.reader(file))
                 return data, 'csv'
