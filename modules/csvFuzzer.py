@@ -36,6 +36,14 @@ class csvFuzzer(fuzzerClass):
         d = map2DList(lambda x: 'A'*1000, self.data)
         self._usePayload(d)
 
+    def extendHorizontally(self):
+        print("===>Trying extending header...")
+        d = [x[:] for x in self.data]
+        for x in d:
+            for _ in range(1000):
+                x.append('A')
+        self.usePayload(d)
+
     def dropHeader(self):
         print("===>Trying removing header...")
         d = self.data[1:]
@@ -58,6 +66,6 @@ class csvFuzzer(fuzzerClass):
     def repeat(self):
         print("===>Trying repeat input")
         d = []
-        for _ in range(100):
-            d.append(self.data)
+        for _ in range(500):
+            d.extend(self.data)
         self.usePayload(d)

@@ -1,13 +1,21 @@
 from pwn import process, context
 import sys
 
+outputFormat = """SUCCESS! Process crashed with code {}
+PAYLOAD:
+=========================================
+{}{}
+========================================="
+"""
+
 #HELPER: formats output to console
 def logPayload(code, payload):
-    print("SUCCESS! Process crashed with code {}".format(code))
-    print("PAYLOAD:")
-    print("=========================================")
-    print(payload)
-    print("=========================================")
+    ellipsis = "\n..." if len(payload) > 200 else ""
+    out = outputFormat.format(code, payload[0:200], ellipsis)
+    print(out)
+    f = open("bad.txt", "a+")
+    f.write(out)
+    f.close
 
 #Turns off pwn logging
 context.log_level = 'warn'
