@@ -22,17 +22,17 @@ class csvFuzzer(fuzzerClass):
 
     #Fuzzing Techniques
     def allNull(self):
-        print("Trying all null...")
+        print("===>Trying all null...")
         d = map2DList(lambda x: None, self.data)
         self.usePayload(d)
 
     def dropHeader(self):
-        print("Trying removing header...")
+        print("===>Trying removing header...")
         d = self.data[1:]
         self.usePayload(d)
 
     def numericFuzzer(self):
-        print("Trying numeric fuzzing")
+        print("===>Trying numeric fuzzing")
         d = map2DList(lambda x: -1, self.data)
         self.usePayload(d)
         d = map2DList(lambda x: 0, self.data)
@@ -41,6 +41,6 @@ class csvFuzzer(fuzzerClass):
         self.usePayload(d)
 
     def flipSign(self):
-        print("Trying sign flip")
+        print("===>Trying sign flip")
         d = map2DList(lambda x: -x, self.data)
         self.usePayload(d)

@@ -24,11 +24,13 @@ if (len(sys.argv) > 2):
             fuzzer = xmlFuzzer(binary, data)
         else:
             fuzzer = txtFuzzer(binary, data)
-        
-        fuzzer.fuzz()
-        if not fuzzer.success:
-            print("Couldn't crash program with input mutation.")
-            print("Continuing with random generated inputs...")
+
     except:
         print("Couldn't read supplied input.")
         print("Continuing with random generated inputs...")
+        fuzzer = randomFuzzer(binary, data)
+
+fuzzer.fuzz()
+if not fuzzer.success:
+    print("Couldn't crash program with input mutation.")
+    print("Continuing with random generated inputs...")
