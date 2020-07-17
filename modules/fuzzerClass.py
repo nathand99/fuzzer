@@ -5,8 +5,7 @@ outputFormat = """SUCCESS! Process crashed with code {}
 PAYLOAD:
 =========================================
 {}{}
-========================================="
-"""
+========================================="""
 
 #HELPER: formats output to console
 def logPayload(code, payload):
