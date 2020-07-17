@@ -12,8 +12,8 @@ def logPayload(code, payload):
     ellipsis = "\n..." if len(payload) > 200 else ""
     out = outputFormat.format(code, payload[0:200], ellipsis)
     print(out)
-    f = open("bad.txt", "a+")
-    f.write(out)
+    f = open("bad.txt", "w")
+    f.write(payload)
     f.close
 
 #Turns off pwn logging
