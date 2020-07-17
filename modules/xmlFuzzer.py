@@ -11,9 +11,4 @@ class xmlFuzzer:
         self.data = data
         self.makePayload = makePayload
 
-    #Main class function which runs all the different techniques
-    def fuzz(self):
-        #TODO
-        return #remove after implementation
-
-    #Other Techniques
+    #Fuzzing Techniques

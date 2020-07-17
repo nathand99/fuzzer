@@ -20,6 +20,18 @@ class fuzzerClass:
         self.data = data
         self.makePayload = payloadFormatter
 
+    def fuzz(self):
+        attributes = list(filter(
+            lambda x: not x.startswith("_")
+            and not x.endswith("Payload")
+            and not x == "fuzz",
+            dir(self)))
+        for attribute in attributes:
+            method = getattr(self, attribute)
+            if callable(method):
+                method()
+
+
     #Returns the exit code of the process or 0 if process didn't exit
     def sendPayload(self, payload):
         p = process(self.binary)
@@ -27,6 +39,7 @@ class fuzzerClass:
         p.wait_for_close(timeout=0.5)
         code = p.poll()
         if code is None:
+            code = 0
             p.kill()    #Kill proc if doesn't stop on its own
         return code
 

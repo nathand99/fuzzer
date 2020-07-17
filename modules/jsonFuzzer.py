@@ -14,20 +14,11 @@ class jsonFuzzer(fuzzerClass):
         self.data = data
         self.makePayload = makePayload
 
-    #Main class function which runs all the different techniques
-    def fuzz(self):
-        #TODO
-        #self.fuzzNumeric()
-        #self.fuzzStrings()
-        #self.fuzzEveryNumber()
-        self.fuzzFloat()
-        return #remove after implementation
-
-    #Other Techniques
+    #Fuzzing Techniques
     
     # Mess with numeric fields
     def fuzzNumeric(self):
-        d=copy.deepcopy(self.data)  
+        d = copy.deepcopy(self.data)  
        
         numericFields = []
 
