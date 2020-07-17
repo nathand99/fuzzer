@@ -6,7 +6,6 @@ from .fuzzerClass import fuzzerClass
 # Convert python object into json string
 def makePayload(data):
     return json.dumps(data)
-    return
 
 class jsonFuzzer(fuzzerClass):
 
@@ -18,10 +17,9 @@ class jsonFuzzer(fuzzerClass):
     #Main class function which runs all the different techniques
     def fuzz(self):
         #TODO
-        self.fuzzNumeric()
+        #self.fuzzNumeric()
+        self.fuzzStrings()
         return #remove after implementation
-
-
 
     #Other Techniques
     
@@ -46,3 +44,26 @@ class jsonFuzzer(fuzzerClass):
 
         #self.usePayload(d)
 
+    # fuzz strings
+    def fuzzStrings(self):
+        d=copy.deepcopy(self.data)  
+       
+        stringFields = []
+
+        for key in d.keys():
+            if isinstance(d[key], str):
+                stringFields.append(key)
+
+        for field in stringFields:
+            d[field] = ""
+            self.usePayload(d)
+            d[field] = "A"*1000
+            self.usePayload(d)
+            d[field] = "10000000"
+            self.usePayload(d)
+            d[field] = True
+            self.usePayload(d)
+            d[field] = False
+            self.usePayload(d)
+            d[field] = None
+            self.usePayload(d)
