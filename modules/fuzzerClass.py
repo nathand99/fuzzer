@@ -1,4 +1,5 @@
 from pwn import process, context
+import sys
 
 #HELPER: formats output to console
 def logPayload(code, payload):
@@ -34,9 +35,10 @@ class fuzzerClass:
 
     #Returns the exit code of the process or 0 if process didn't exit
     def sendPayload(self, payload):
-        p = process(self.binary, stdout=1)
+        p = process(self.binary)
         p.send(payload)
-        p.wait_for_close(timeout=0.5)
+        p.sendline()
+        p.wait_for_close(timeout=0.2)
         code = p.poll()
         if code is None:
             code = 0
