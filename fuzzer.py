@@ -21,11 +21,11 @@ if (len(sys.argv) > 2):
         if fileType == 'csv':
             fuzzer = csvFuzzer(binary, data)
         elif fileType == 'json':
-            fuzzers = jsonFuzzer(binary, data)
+            fuzzer = jsonFuzzer(binary, data)
         elif fileType == 'xml':
-            fuzzers = xmlFuzzer(binary, data)
+            fuzzer = xmlFuzzer(binary, data)
         else:
-            fuzzers = txtFuzzer(binary, data)
+            fuzzer = txtFuzzer(binary, data)
 
     except:
         print("##########Couldn't read supplied input")

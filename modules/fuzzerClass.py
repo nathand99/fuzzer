@@ -34,14 +34,14 @@ class fuzzerClass:
 
     #Returns the exit code of the process or 0 if process didn't exit
     def sendPayload(self, payload):
-        p = process(self.binary, stdout=1, stderr=1)
+        p = process(self.binary, stdout=1)
         p.send(payload)
         p.wait_for_close(timeout=0.5)
         code = p.poll()
         if code is None:
             code = 0
             p.kill()    #Kill proc if doesn't stop on its own
-            print("Process did not exit")
+            # print("Process did not exit")
         return code
 
     #Runs the process with payload and prints if error
