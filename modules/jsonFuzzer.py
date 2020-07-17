@@ -18,7 +18,9 @@ class jsonFuzzer(fuzzerClass):
     def fuzz(self):
         #TODO
         #self.fuzzNumeric()
-        self.fuzzStrings()
+        #self.fuzzStrings()
+        #self.fuzzEveryNumber()
+        self.fuzzFloat()
         return #remove after implementation
 
     #Other Techniques
@@ -30,7 +32,7 @@ class jsonFuzzer(fuzzerClass):
         numericFields = []
 
         for key in d.keys():
-            print(d[key])
+            #print(d[key])
             if isinstance(d[key], numbers.Number):
                 numericFields.append(key)
 
@@ -66,4 +68,42 @@ class jsonFuzzer(fuzzerClass):
             d[field] = False
             self.usePayload(d)
             d[field] = None
+            self.usePayload(d)
+    
+    # fuzz lots of numbers - looks like its too slow
+    def fuzzEveryNumber(self):
+        d=copy.deepcopy(self.data)  
+       
+        numericFields = []
+
+        for key in d.keys():
+            if isinstance(d[key], numbers.Number):
+                numericFields.append(key)
+        for num in range(2^63 - 1):
+            #2^63 - 1
+            for field in numericFields:
+                d[field] = num
+            self.usePayload(d)
+
+    # fuzz floats
+    def fuzzFloat(self):
+        d=copy.deepcopy(self.data)  
+       
+        numericFields = []
+
+        for key in d.keys():
+            #print(d[key])
+            if isinstance(d[key], numbers.Number):
+                numericFields.append(key)
+
+        for field in numericFields:
+            d[field] = 0.0
+            self.usePayload(d)
+            d[field] = 0.1
+            self.usePayload(d)
+            d[field] = -1.1
+            self.usePayload(d)
+            d[field] = 0.000000009
+            self.usePayload(d)
+            d[field] = 0.000000001
             self.usePayload(d)
