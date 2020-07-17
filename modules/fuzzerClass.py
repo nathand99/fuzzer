@@ -41,6 +41,7 @@ class fuzzerClass:
         if code is None:
             code = 0
             p.kill()    #Kill proc if doesn't stop on its own
+            print("Process did not exit")
         return code
 
     #Runs the process with payload and prints if error

@@ -18,8 +18,8 @@ class jsonFuzzer(fuzzerClass):
     
     # Mess with numeric fields
     def fuzzNumeric(self):
+        print("Trying numeric fuzzing")
         d = copy.deepcopy(self.data)  
-       
         numericFields = []
 
         for key in d.keys():
@@ -39,6 +39,7 @@ class jsonFuzzer(fuzzerClass):
 
     # fuzz strings
     def fuzzStrings(self):
+        print("Trying string fuzzing")
         d=copy.deepcopy(self.data)  
        
         stringFields = []
@@ -61,29 +62,14 @@ class jsonFuzzer(fuzzerClass):
             d[field] = None
             self.usePayload(d)
     
-    # fuzz lots of numbers - looks like its too slow
-    def fuzzEveryNumber(self):
-        d=copy.deepcopy(self.data)  
-       
-        numericFields = []
-
-        for key in d.keys():
-            if isinstance(d[key], numbers.Number):
-                numericFields.append(key)
-        for num in range(2^63 - 1):
-            #2^63 - 1
-            for field in numericFields:
-                d[field] = num
-            self.usePayload(d)
-
     # fuzz floats
     def fuzzFloat(self):
+        print("Trying float fuzzing")
         d=copy.deepcopy(self.data)  
        
         numericFields = []
 
         for key in d.keys():
-            #print(d[key])
             if isinstance(d[key], numbers.Number):
                 numericFields.append(key)
 
@@ -98,3 +84,40 @@ class jsonFuzzer(fuzzerClass):
             self.usePayload(d)
             d[field] = 0.000000001
             self.usePayload(d)
+
+    # default input
+    def fuzzDefault(self):
+        print("trying default input")
+        #print(type(self.data))
+        d = copy.deepcopy(self.data)  
+        #print(type(d))
+        ret = json.dumps(d)
+        #print(type(json.dumps(d)))
+        self.usePayload(ret)
+
+    # fuzz list
+    def fuzzList(self):
+        print("Trying fuzz lists")
+        d = copy.deepcopy(self.data)  
+        self.usePayload(d)
+        listFields = []
+
+        for key in d.keys():
+            if isinstance(d[key], list):
+                listFields.append(key)
+        #default length is 12 - give 13
+        for field in listFields:
+            d[field] = []
+            self.usePayload(d)
+            d[field] = ["a"]
+            self.usePayload(d)
+            d[field] = [1]
+            self.usePayload(d)
+            d[field] = [True]
+            self.usePayload(d)
+            d[field] = ["AAAAAAAAAAAAAAAAAAAAAAA"]
+            self.usePayload(d)
+            d[field] = ["A"]*100
+            self.usePayload(d)
+    
+
