@@ -50,5 +50,3 @@ class fuzzerClass:
         if exitCode != 0:
             self.success = True
             logPayload(exitCode, payload)
-
-        

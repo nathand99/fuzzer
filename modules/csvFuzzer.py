@@ -8,39 +8,45 @@ def map2DList(fn, l):
 #returns new csv from list as string
 def makePayload(l):
     f = io.StringIO(None)
-    writer = csv.writer(f)
+    writer = csv.writer(f, lineterminator='\n')
     for row in l:
         writer.writerow(row)
     return f.getvalue()
 
 class csvFuzzer(fuzzerClass):
 
-    def __init__(self, binary, data):
+    def __init__(self, binary, data, header):
         self.binary = binary
         self.data = data
+        self.header = False
         self.makePayload = makePayload
+
+    def _usePayload(self, d):
+        if (self.header):
+            d[0] = self.data[0]
+        self.usePayload(d)
 
     #Fuzzing Techniques
     def allNull(self):
         print("===>Trying all null...")
         d = map2DList(lambda x: None, self.data)
-        self.usePayload(d)
+        self._usePayload(d)
 
     def dropHeader(self):
         print("===>Trying removing header...")
         d = self.data[1:]
-        self.usePayload(d)
+        self._usePayload(d)
 
     def numericFuzzer(self):
         print("===>Trying numeric fuzzing")
         d = map2DList(lambda x: -1, self.data)
-        self.usePayload(d)
+        self._usePayload(d)
         d = map2DList(lambda x: 0, self.data)
-        self.usePayload(d)
+        self._usePayload(d)
         d = map2DList(lambda x: 999999, self.data)
-        self.usePayload(d)
+        self._usePayload(d)
 
     def flipSign(self):
         print("===>Trying sign flip")
-        d = map2DList(lambda x: -x, self.data)
-        self.usePayload(d)
+        d = map2DList(lambda x: -int(x) if x.isdigit() else x, self.data)
+        self._usePayload(d)
