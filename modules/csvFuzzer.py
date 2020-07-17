@@ -15,15 +15,14 @@ def makePayload(l):
 
 class csvFuzzer(fuzzerClass):
 
-    def __init__(self, binary, data, header):
+    def __init__(self, binary, data):
         self.binary = binary
         self.data = data
-        self.header = False
         self.makePayload = makePayload
 
     def _usePayload(self, d):
-        if (self.header):
-            d[0] = self.data[0]
+        self.usePayload(d)
+        d[0] = self.data[0]
         self.usePayload(d)
 
     #Fuzzing Techniques
@@ -50,3 +49,10 @@ class csvFuzzer(fuzzerClass):
         print("===>Trying sign flip")
         d = map2DList(lambda x: -int(x) if x.isdigit() else x, self.data)
         self._usePayload(d)
+
+    def repeat(self):
+        print("===>Trying repeat input")
+        d = []
+        for _ in range(10):
+            d.append(self.data)
+        self.usePayload(d)

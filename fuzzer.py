@@ -6,7 +6,7 @@ from xml.etree import ElementTree
 from modules import *
 
 binary = sys.argv[1]
-fuzzers = []
+fuzzer = None
 success = False
 
 if not os.path.isfile(binary):
@@ -16,26 +16,28 @@ if (len(sys.argv) > 2):
     try:
         suppliedInput = open(sys.argv[2])
         data, fileType = parseFile(suppliedInput) #Check modules/parser for doc on return
-        print("Supplied input of type: {}".format(fileType))
+        print("##########Supplied input of type: {}".format(fileType))
 
         if fileType == 'csv':
-            fuzzers = [csvFuzzer(binary, data, True), csvFuzzer(binary, data, False)]
+            fuzzer = csvFuzzer(binary, data)
         elif fileType == 'json':
-            fuzzers = [jsonFuzzer(binary, data)]
+            fuzzers = jsonFuzzer(binary, data)
         elif fileType == 'xml':
-            fuzzers = [xmlFuzzer(binary, data)]
+            fuzzers = xmlFuzzer(binary, data)
         else:
-            fuzzers = [txtFuzzer(binary, data)]
+            fuzzers = txtFuzzer(binary, data)
 
     except:
-        print("Couldn't read supplied input.")
-        print("Continuing with random generated inputs...")
+        print("##########Couldn't read supplied input")
+        print("##########Continuing with random generated inputs...")
 
-fuzzers.append(randomFuzzer(binary, data))
-
-for fuzzer in fuzzers:
+if fuzzer is not None:
     fuzzer.fuzz()
-    if fuzzer.success:
-        success = True 
-if not success:
-    print("Couldn't crash program :(")
+    if not fuzzer.success:
+        print("##########Couldn't crash program with input mutation")
+        print("##########Continuing with random generated inputs...")
+
+fuzzer = randomFuzzer(binary, data)
+fuzzer.fuzz()
+if not fuzzer.success:
+    print("##########Couldn't crash program :(")
