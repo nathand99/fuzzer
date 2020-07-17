@@ -34,7 +34,7 @@ class fuzzerClass:
 
     #Returns the exit code of the process or 0 if process didn't exit
     def sendPayload(self, payload):
-        p = process(self.binary)
+        p = process(self.binary, stdout=1)
         p.send(payload)
         p.wait_for_close(timeout=0.5)
         code = p.poll()
@@ -51,5 +51,3 @@ class fuzzerClass:
         if exitCode != 0:
             self.success = True
             logPayload(exitCode, payload)
-
-        

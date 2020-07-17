@@ -6,6 +6,8 @@ from xml.etree import ElementTree
 from modules import *
 
 binary = sys.argv[1]
+fuzzers = []
+success = False
 
 if not os.path.isfile(binary):
     exit("Couldn't find binary please use format: python fuzzer.py <binary> [supplied input]")
@@ -17,18 +19,23 @@ if (len(sys.argv) > 2):
         print("Supplied input of type: {}".format(fileType))
 
         if fileType == 'csv':
-            fuzzer = csvFuzzer(binary, data)
+            fuzzers = [csvFuzzer(binary, data, True), csvFuzzer(binary, data, False)]
         elif fileType == 'json':
-            fuzzer = jsonFuzzer(binary, data)
+            fuzzers = [jsonFuzzer(binary, data)]
         elif fileType == 'xml':
-            fuzzer = xmlFuzzer(binary, data)
+            fuzzers = [xmlFuzzer(binary, data)]
         else:
-            fuzzer = txtFuzzer(binary, data)
-        
-        fuzzer.fuzz()
-        if not fuzzer.success:
-            print("Couldn't crash program with input mutation.")
-            print("Continuing with random generated inputs...")
+            fuzzers = [txtFuzzer(binary, data)]
+
     except:
         print("Couldn't read supplied input.")
         print("Continuing with random generated inputs...")
+
+fuzzers.append(randomFuzzer(binary, data))
+
+for fuzzer in fuzzers:
+    fuzzer.fuzz()
+    if fuzzer.success:
+        success = True 
+if not success:
+    print("Couldn't crash program :(")
