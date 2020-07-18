@@ -10,7 +10,7 @@ fuzzer = None
 success = False
 
 if not os.path.isfile(binary):
-    exit("Couldn't find binary please use format: python fuzzer.py <binary> [supplied input]")
+    exit("Couldn't find binary please use format: ./fuzzer <binary> [supplied input]")
 
 if (len(sys.argv) > 2):
     try:
