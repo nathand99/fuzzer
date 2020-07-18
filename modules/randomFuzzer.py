@@ -2,8 +2,8 @@ from .fuzzerClass import fuzzerClass
 
 class randomFuzzer(fuzzerClass):
 
-    def __init__(self, binary, data):
-        super(randomFuzzer,self).__init__(binary, data, lambda x: x)
+    def __init__(self, binary):
+        super(randomFuzzer,self).__init__(binary, None, lambda x: x)
 
     #Fuzzing Techniques
     def empty(self):

@@ -44,7 +44,7 @@ if fuzzer is not None:
 
 print("##########Trying random generated inputs...")
 
-fuzzer = randomFuzzer(binary, data)
+fuzzer = randomFuzzer(binary)
 fuzzer.fuzz()
 success = success or fuzzer.success
 if not success:
