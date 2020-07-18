@@ -55,7 +55,6 @@ class fuzzerClass:
         ellipsis = "\n..." if len(payload) > 200 else ""
         out = outputFormat.format(code, payload[0:200], ellipsis)
         print(out)
-        print(glob.glob("bad*.txt"))
         suffix = len(glob.glob("bad*.txt"))
         suffix = suffix + 1 if suffix > 0 else ""
         f = open("bad{}.txt".format(suffix), "w")

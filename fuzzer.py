@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import sys, os
+import sys, os, glob
 import json
 import csv
 from xml.etree import ElementTree
@@ -30,6 +30,11 @@ if (len(sys.argv) > 2):
     except:
         print("##########Couldn't read supplied input")
         print("##########Continuing with random generated inputs...")
+
+#remove previous bad outputs
+bads = glob.glob("bad*.txt")
+for bad in bads:
+    os.remove(bad)
 
 if fuzzer is not None:
     fuzzer.fuzz()
