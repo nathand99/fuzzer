@@ -33,11 +33,16 @@ if (len(sys.argv) > 2):
 
 if fuzzer is not None:
     fuzzer.fuzz()
-    if not fuzzer.success:
+    success = success or fuzzer.success
+    if not success:
         print("##########Couldn't crash program with input mutation")
-        print("##########Continuing with random generated inputs...")
+
+print("##########Trying random generated inputs...")
 
 fuzzer = randomFuzzer(binary, data)
 fuzzer.fuzz()
-if not fuzzer.success:
+success = success or fuzzer.success
+if not success:
     print("##########Couldn't crash program :(")
+else:
+    print("##########Managed to crash program :)")

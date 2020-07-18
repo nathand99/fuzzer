@@ -1,5 +1,5 @@
 from pwn import process, context
-import sys
+import sys, glob
 
 outputFormat = """SUCCESS! Process crashed with code {}
 PAYLOAD:
@@ -7,26 +7,16 @@ PAYLOAD:
 {}{}
 ========================================="""
 
-#HELPER: formats output to console
-def logPayload(code, payload):
-    ellipsis = "\n..." if len(payload) > 200 else ""
-    out = outputFormat.format(code, payload[0:200], ellipsis)
-    print(out)
-    f = open("bad.txt", "w")
-    f.write(payload)
-    f.close
-
 #Turns off pwn logging
 context.log_level = 'warn'
 
 class fuzzerClass:
 
-    success = False
-
-    def __init__(self, binary, data, payloadFormatter):
+    def __init__(self, binary, data, makePayload):
         self.binary = binary
         self.data = data
-        self.makePayload = payloadFormatter
+        self.makePayload = makePayload
+        self.success = False
 
     def fuzz(self):
         attributes = list(filter(
@@ -58,5 +48,17 @@ class fuzzerClass:
         payload = self.makePayload(data)
         exitCode = self.sendPayload(payload)
         if exitCode != 0:
-            self.success = True
-            logPayload(exitCode, payload)
+            self._logPayload(exitCode, payload)
+
+    #Logs output to console and bad and sets success true
+    def _logPayload(self, code, payload):
+        ellipsis = "\n..." if len(payload) > 200 else ""
+        out = outputFormat.format(code, payload[0:200], ellipsis)
+        print(out)
+        print(glob.glob("bad*.txt"))
+        suffix = len(glob.glob("bad*.txt"))
+        suffix = suffix + 1 if suffix > 0 else ""
+        f = open("bad{}.txt".format(suffix), "w")
+        f.write(payload)
+        f.close
+        self.success = True

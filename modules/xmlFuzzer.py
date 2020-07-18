@@ -7,8 +7,6 @@ def makePayload():
 class xmlFuzzer:
 
     def __init__(self, binary, data):
-        self.binary = binary
-        self.data = data
-        self.makePayload = makePayload
+        super(xmlFuzzer,self).__init__(binary, data, makePayload)
 
     #Fuzzing Techniques

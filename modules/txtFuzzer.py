@@ -7,8 +7,6 @@ def makePayload():
 class txtFuzzer:
 
     def __init__(self, binary, data):
-        self.binary = binary
-        self.data = data
-        self.makePayload = makePayload
+        super(txtFuzzer,self).__init__(binary, data, makePayload)
 
     #Fuzzing Techniques

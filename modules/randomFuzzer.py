@@ -3,9 +3,7 @@ from .fuzzerClass import fuzzerClass
 class randomFuzzer(fuzzerClass):
 
     def __init__(self, binary, data):
-        self.binary = binary
-        self.data = data
-        self.makePayload = lambda x: x
+        super(randomFuzzer,self).__init__(binary, data, lambda x: x)
 
     #Fuzzing Techniques
     def empty(self):

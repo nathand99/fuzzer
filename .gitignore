@@ -1,5 +1,5 @@
 test.py
-bad.txt
+bad*.txt
 core
 *.pyc
 modules/__pycache__/

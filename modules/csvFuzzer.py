@@ -16,9 +16,7 @@ def makePayload(l):
 class csvFuzzer(fuzzerClass):
 
     def __init__(self, binary, data):
-        self.binary = binary
-        self.data = data
-        self.makePayload = makePayload
+        super(csvFuzzer,self).__init__(binary, data, makePayload)
 
     def _usePayload(self, d):
         self.usePayload(d)
