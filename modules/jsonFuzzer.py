@@ -16,7 +16,7 @@ class jsonFuzzer(fuzzerClass):
     
     # Mess with numeric fields
     def fuzzNumeric(self):
-        print("Trying numeric fuzzing")
+        print("===>Trying numeric fuzzing")
         d = copy.deepcopy(self.data)  
         numericFields = []
 
@@ -37,7 +37,7 @@ class jsonFuzzer(fuzzerClass):
 
     # fuzz strings
     def fuzzStrings(self):
-        print("Trying string fuzzing")
+        print("===>Trying string fuzzing")
         d=copy.deepcopy(self.data)  
        
         stringFields = []
@@ -62,7 +62,7 @@ class jsonFuzzer(fuzzerClass):
     
     # fuzz floats
     def fuzzFloat(self):
-        print("Trying float fuzzing")
+        print("===>Trying float fuzzing")
         d=copy.deepcopy(self.data)  
        
         numericFields = []
@@ -85,17 +85,13 @@ class jsonFuzzer(fuzzerClass):
 
     # default input
     def fuzzDefault(self):
-        print("trying default input")
-        #print(type(self.data))
-        d = copy.deepcopy(self.data)  
-        #print(type(d))
-        ret = json.dumps(d)
-        #print(type(json.dumps(d)))
+        print("===>Trying default input")
+        ret = self.data
         self.usePayload(ret)
 
     # fuzz list
     def fuzzList(self):
-        print("Trying fuzz lists")
+        print("===>Trying fuzz lists")
         d = copy.deepcopy(self.data)  
         self.usePayload(d)
         listFields = []
