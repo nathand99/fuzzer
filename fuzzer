@@ -24,7 +24,9 @@ if (len(sys.argv) > 2):
         elif fileType == 'json':
             fuzzers = [jsonFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read(), stopAtFirst)]
         elif fileType == 'xml':
-            fuzzers = [xmlFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read(), stopAtFirst)]
+            # fuzzers = [xmlFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read(), stopAtFirst)]
+            ElementTree.dump(data)
+            fuzzers = [txtFuzzer(binary, suppliedInput.read(), stopAtFirst)]
         else:
             fuzzers = [txtFuzzer(binary, data, stopAtFirst)]
     except Exception as e:

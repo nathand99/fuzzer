@@ -60,10 +60,3 @@ class csvFuzzer(fuzzerClass):
         print("===>Trying sign flip")
         d = map2DList(lambda x: -int(x) if x.isdigit() else x, self.data)
         self._usePayload(d)
-
-    def repeat(self):
-        print("===>Trying repeat input")
-        d = []
-        for _ in range(500):
-            d.extend(self.data)
-        self.usePayload(d)
