@@ -20,13 +20,13 @@ if (len(sys.argv) > 2):
 
         print("Supplied input of type: {}".format(fileType))
         if fileType == 'csv':
-            fuzzers = [csvFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read() stopAtFirst)]
+            fuzzers = [csvFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read(), stopAtFirst)]
         elif fileType == 'json':
-            fuzzers = [jsonFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read() stopAtFirst)]
+            fuzzers = [jsonFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read(), stopAtFirst)]
         elif fileType == 'xml':
             fuzzers = [xmlFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read(), stopAtFirst)]
         else:
-            fuzzers = [txtFuzzer(binary, data stopAtFirst)]
+            fuzzers = [txtFuzzer(binary, data, stopAtFirst)]
     except Exception as e:
         print(e)
         fuzzers = []
