@@ -20,6 +20,10 @@ class txtFuzzer(fuzzerClass):
             # d = self.data.replace(meta, "")
             # self.usePayload(d)
 
+    def digitsNegative(self):
+        print("===>Making numbers negative")
+        self.usePayload(re.sub(r"(\d+)", r"-\1", self.data))
+
     def bitFlip(self):
         print("===>Trying random bit flips")
         for i in range(len(self.data)):
@@ -27,10 +31,15 @@ class txtFuzzer(fuzzerClass):
                 d = bytearray(self.data, 'utf-8')
                 d[i] ^= random.randint(1, 255)
                 self.usePayload(d)
-        
+
+    def removeNUll(self):
+        print("===>Trying remove all NULL")
+        d = self.data.encode()
+        self.usePayload(d.replace(b"\x00", b""))
+
     def repeat(self):
         print("===>Trying repeat input")
         d = self.data
-        for _ in range(10):
+        for _ in range(8):
             d += d
-        self.usePayload(d)
+        self.usePayload(d[:10000])
