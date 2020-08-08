@@ -6,7 +6,7 @@ def makePayload():
 
 class xmlFuzzer:
 
-    def __init__(self, binary, data):
-        super(xmlFuzzer,self).__init__(binary, data, makePayload, "XML Mutation")
+    def __init__(self, binary, data, stopAtFirst=False):
+        super(xmlFuzzer,self).__init__(binary, data, makePayload, "XML Mutation", stopAtFirst)
 
     #Fuzzing Techniques

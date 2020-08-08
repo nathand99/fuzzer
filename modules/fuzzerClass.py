@@ -12,11 +12,12 @@ context.log_level = 'warn'
 
 class fuzzerClass:
 
-    def __init__(self, binary, data, makePayload, name):
+    def __init__(self, binary, data, makePayload, name, stopAtFirst=False):
         self.binary = binary
         self.data = data
         self.makePayload = makePayload
         self.name = name
+        self.stopAtFirst = stopAtFirst
         self.success = False
 
     def fuzz(self):
@@ -29,6 +30,8 @@ class fuzzerClass:
             method = getattr(self, attribute)
             if callable(method):
                 method()
+                if self.success and self.stopAtFirst:
+                    return
 
 
     #Returns the exit code of the process or 0 if process didn't exit

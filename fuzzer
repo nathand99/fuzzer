@@ -6,6 +6,7 @@ from xml.etree import ElementTree
 from modules import *
 
 binary = sys.argv[1]
+stopAtFirst = True
 success = False
 
 if not os.path.isfile(binary):
@@ -19,19 +20,19 @@ if (len(sys.argv) > 2):
 
         print("Supplied input of type: {}".format(fileType))
         if fileType == 'csv':
-            fuzzers = [csvFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read())]
+            fuzzers = [csvFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read() stopAtFirst)]
         elif fileType == 'json':
-            fuzzers = [jsonFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read())]
+            fuzzers = [jsonFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read() stopAtFirst)]
         elif fileType == 'xml':
-            fuzzers = [xmlFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read())]
+            fuzzers = [xmlFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read(), stopAtFirst)]
         else:
-            fuzzers = [txtFuzzer(binary, data)]
+            fuzzers = [txtFuzzer(binary, data stopAtFirst)]
     except Exception as e:
         print(e)
         fuzzers = []
         print("Couldn't read supplied input, continuing...")
 
-fuzzers.append(randomFuzzer(binary))
+fuzzers.append(randomFuzzer(binary, stopAtFirst))
 
 #remove previous bad outputs
 bads = glob.glob("bad*.txt")
@@ -44,6 +45,8 @@ for fuzzer in fuzzers:
     if fuzzer.success:
         success = True
         print("{:+^75}".format("Crashed program with {}".format(fuzzer.name)))
+        if stopAtFirst:
+            break
     else:
         print("{:-^75}".format("Couldn't crash program with {}".format(fuzzer.name)))
 
