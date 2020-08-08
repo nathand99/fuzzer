@@ -6,6 +6,7 @@ from xml.etree import ElementTree
 from modules import *
 
 binary = sys.argv[1]
+fuzzers = []
 stopAtFirst = True
 success = False
 
@@ -24,7 +25,14 @@ if (len(sys.argv) > 2):
             fuzzers = [jsonFuzzer(binary, data, stopAtFirst)]
         elif fileType == 'xml':
             fuzzers = [xmlFuzzer(binary, data, stopAtFirst)]
+        
         fuzzers.append(txtFuzzer(binary, suppliedInput.read(), stopAtFirst))
+        
+        suppliedInput.close()
+        suppliedInput = open(sys.argv[2], "rb")
+        fuzzers.append(binFuzzer(binary, suppliedInput.read(), stopAtFirst))
+        suppliedInput.close()
+
     except Exception as e:
         print(e)
         fuzzers = []

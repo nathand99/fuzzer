@@ -58,17 +58,18 @@ class fuzzerClass:
     def usePayload(self, data):
         payload = self.makePayload(data)
         exitCode = self.sendPayload(payload)
-        if exitCode != 0:
+        if exitCode < -6:
             self._logPayload(exitCode, payload)
+            return True
 
     #Logs output to console and bad and sets success true
     def _logPayload(self, code, payload):
-        ellipsis = "\n..." if len(payload) > 200 else ""
-        out = outputFormat.format(code, payload[0:200], ellipsis)
+        ellipsis = "\n..." if len(payload) > 500 else ""
+        out = outputFormat.format(code, payload[0:500], ellipsis)
         print(out)
         suffix = len(glob.glob("bad*.txt"))
         suffix = suffix + 1 if suffix > 0 else ""
         f = open("bad{}.txt".format(suffix), "w")
-        f.write(payload)
+        f.write(str(payload))
         f.close
         self.success = True

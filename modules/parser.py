@@ -27,6 +27,6 @@ def parseFile(file):
                 data = list(csv.reader(file))
                 t = 'csv'
             except:
-                pass
+                t = 'txt'
     file.seek(0)
     return data, t

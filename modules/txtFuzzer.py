@@ -14,9 +14,11 @@ class txtFuzzer(fuzzerClass):
         print("===>Trying drop meta char")
         for meta in metachars:
             d = "".join(self.data.rsplit(meta, 1))
-            self.usePayload(d)
+            if self.usePayload(d) and self.stopAtFirst:
+                return
             d = self.data.replace(meta, "", 1)
-            self.usePayload(d)
+            if self.usePayload(d) and self.stopAtFirst:
+                return
             # d = self.data.replace(meta, "")
             # self.usePayload(d)
 
@@ -24,24 +26,11 @@ class txtFuzzer(fuzzerClass):
         print("===>Numeric fuzzing")
         self.usePayload(re.sub(r"(\d+)", r"-\1", self.data))
         self.usePayload(re.sub(r"\d+", r"0", self.data))
-        self.usePayload(re.sub(r"\d+", r"999999999", self.data))
-
-    def bitFlip(self):
-        print("===>Trying random bit flips")
-        for i in range(len(self.data)):
-            if random.random() > 0.95:
-                d = bytearray(self.data, 'utf-8')
-                d[i] ^= random.randint(1, 255)
-                self.usePayload(d)
-
-    def removeNUll(self):
-        print("===>Trying remove all NULL")
-        d = self.data.encode()
-        self.usePayload(d.replace(b"\x00", b""))
+        self.usePayload(re.sub(r"\d+", r"999999999999", self.data))
 
     def repeat(self):
         print("===>Trying repeat input")
         d = self.data
         for _ in range(8):
             d += d
-        self.usePayload(d[:50000])
+        self.usePayload(d[:100000])
