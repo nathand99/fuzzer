@@ -16,19 +16,15 @@ if (len(sys.argv) > 2):
     try:
         suppliedInput = open(sys.argv[2])
         data, fileType = parseFile(suppliedInput) #Check modules/parser for doc on return
-        suppliedInput.seek(0)
 
         print("Supplied input of type: {}".format(fileType))
         if fileType == 'csv':
-            fuzzers = [csvFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read(), stopAtFirst)]
+            fuzzers = [csvFuzzer(binary, data, stopAtFirst)]
         elif fileType == 'json':
-            fuzzers = [jsonFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read(), stopAtFirst)]
+            fuzzers = [jsonFuzzer(binary, data, stopAtFirst)]
         elif fileType == 'xml':
-            # fuzzers = [xmlFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read(), stopAtFirst)]
-            ElementTree.dump(data)
-            fuzzers = [txtFuzzer(binary, suppliedInput.read(), stopAtFirst)]
-        else:
-            fuzzers = [txtFuzzer(binary, data, stopAtFirst)]
+            fuzzers = [xmlFuzzer(binary, data, stopAtFirst)]
+        fuzzers.append(txtFuzzer(binary, suppliedInput.read(), stopAtFirst))
     except Exception as e:
         print(e)
         fuzzers = []

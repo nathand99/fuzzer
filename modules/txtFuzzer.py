@@ -20,9 +20,11 @@ class txtFuzzer(fuzzerClass):
             # d = self.data.replace(meta, "")
             # self.usePayload(d)
 
-    def digitsNegative(self):
-        print("===>Making numbers negative")
+    def numericFuzzer(self):
+        print("===>Numeric fuzzing")
         self.usePayload(re.sub(r"(\d+)", r"-\1", self.data))
+        self.usePayload(re.sub(r"\d+", r"0", self.data))
+        self.usePayload(re.sub(r"\d+", r"999999999", self.data))
 
     def bitFlip(self):
         print("===>Trying random bit flips")
@@ -42,4 +44,4 @@ class txtFuzzer(fuzzerClass):
         d = self.data
         for _ in range(8):
             d += d
-        self.usePayload(d[:10000])
+        self.usePayload(d[:50000])

@@ -9,21 +9,24 @@ from xml.etree import ElementTree
 #TXT  returns String
 
 def parseFile(file):
+    data = None
+    t = None
     try:
         data = json.load(file)
-        return data, 'json'
+        t = 'json'
     except:
         file.seek(0)
         try:
             data = ElementTree.parse(file)
-            return data, 'xml'
+            t = 'xml'
         except:
             file.seek(0)
             try:
                 csv.Sniffer().sniff(file.read(), delimiters=",") #checks csv format
                 file.seek(0)
                 data = list(csv.reader(file))
-                return data, 'csv'
+                t = 'csv'
             except:
-                file.seek(0)
-                return file.read(), 'txt'
+                pass
+    file.seek(0)
+    return data, t

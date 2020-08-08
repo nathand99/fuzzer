@@ -13,27 +13,9 @@ class jsonFuzzer(fuzzerClass):
         super(jsonFuzzer,self).__init__(binary, data, makePayload, "JSON Mutation", stopAtFirst)
 
     #Fuzzing Techniques
-    
-    # Mess with numeric fields
-    def fuzzNumeric(self):
-        print("===>Trying numeric fuzzing")
-        d = copy.deepcopy(self.data)  
-        numericFields = []
 
-        for key in d.keys():
-            #print(d[key])
-            if isinstance(d[key], numbers.Number):
-                numericFields.append(key)
-
-        for field in numericFields:
-            d[field] = 999999
-            self.usePayload(d)
-            d[field] = 0
-            self.usePayload(d)
-            d[field] = -1
-            self.usePayload(d)
-
-        #self.usePayload(d)
+    def emptyObject(self):
+        self.usePayload('\{\}')
 
     # fuzz strings
     def fuzzStrings(self):
@@ -59,35 +41,6 @@ class jsonFuzzer(fuzzerClass):
             self.usePayload(d)
             d[field] = None
             self.usePayload(d)
-    
-    # fuzz floats
-    def fuzzFloat(self):
-        print("===>Trying float fuzzing")
-        d=copy.deepcopy(self.data)  
-       
-        numericFields = []
-
-        for key in d.keys():
-            if isinstance(d[key], numbers.Number):
-                numericFields.append(key)
-
-        for field in numericFields:
-            d[field] = 0.0
-            self.usePayload(d)
-            d[field] = 0.1
-            self.usePayload(d)
-            d[field] = -1.1
-            self.usePayload(d)
-            d[field] = 0.000000009
-            self.usePayload(d)
-            d[field] = 0.000000001
-            self.usePayload(d)
-
-    # default input
-    def fuzzDefault(self):
-        print("===>Trying default input")
-        ret = self.data
-        self.usePayload(ret)
 
     # fuzz list
     def fuzzList(self):

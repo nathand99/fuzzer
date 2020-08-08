@@ -55,8 +55,3 @@ class csvFuzzer(fuzzerClass):
         self._usePayload(d)
         d = map2DList(lambda x: 999999, self.data)
         self._usePayload(d)
-
-    def flipSign(self):
-        print("===>Trying sign flip")
-        d = map2DList(lambda x: -int(x) if x.isdigit() else x, self.data)
-        self._usePayload(d)
