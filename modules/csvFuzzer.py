@@ -16,7 +16,7 @@ def makePayload(l):
 class csvFuzzer(fuzzerClass):
 
     def __init__(self, binary, data):
-        super(csvFuzzer,self).__init__(binary, data, makePayload)
+        super(csvFuzzer,self).__init__(binary, data, makePayload, "CSV Mutation")
 
     def _usePayload(self, d):
         self.usePayload(d)

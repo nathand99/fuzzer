@@ -10,7 +10,7 @@ def makePayload(data):
 class jsonFuzzer(fuzzerClass):
 
     def __init__(self, binary, data):
-        super(jsonFuzzer,self).__init__(binary, data, makePayload)
+        super(jsonFuzzer,self).__init__(binary, data, makePayload, "JSON Mutation")
 
     #Fuzzing Techniques
     

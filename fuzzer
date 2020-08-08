@@ -6,7 +6,6 @@ from xml.etree import ElementTree
 from modules import *
 
 binary = sys.argv[1]
-fuzzer = None
 success = False
 
 if not os.path.isfile(binary):
@@ -16,38 +15,39 @@ if (len(sys.argv) > 2):
     try:
         suppliedInput = open(sys.argv[2])
         data, fileType = parseFile(suppliedInput) #Check modules/parser for doc on return
-        print("##########Supplied input of type: {}".format(fileType))
+        suppliedInput.seek(0)
 
+        print("Supplied input of type: {}".format(fileType))
         if fileType == 'csv':
-            fuzzer = csvFuzzer(binary, data)
+            fuzzers = [csvFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read())]
         elif fileType == 'json':
-            fuzzer = jsonFuzzer(binary, data)
+            fuzzers = [jsonFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read())]
         elif fileType == 'xml':
-            fuzzer = xmlFuzzer(binary, data)
+            fuzzers = [xmlFuzzer(binary, data), txtFuzzer(binary, suppliedInput.read())]
         else:
-            fuzzer = txtFuzzer(binary, data)
+            fuzzers = [txtFuzzer(binary, data)]
+    except Exception as e:
+        print(e)
+        fuzzers = []
+        print("Couldn't read supplied input, continuing...")
 
-    except:
-        print("##########Couldn't read supplied input")
-        print("##########Continuing with random generated inputs...")
+fuzzers.append(randomFuzzer(binary))
 
 #remove previous bad outputs
 bads = glob.glob("bad*.txt")
 for bad in bads:
     os.remove(bad)
 
-if fuzzer is not None:
+for fuzzer in fuzzers:
+    print("{:#^75}".format("Trying {}".format(fuzzer.name)))
     fuzzer.fuzz()
-    success = success or fuzzer.success
-    if not success:
-        print("##########Couldn't crash program with input mutation")
+    if fuzzer.success:
+        success = True
+        print("{:+^75}".format("Crashed program with {}".format(fuzzer.name)))
+    else:
+        print("{:-^75}".format("Couldn't crash program with {}".format(fuzzer.name)))
 
-print("##########Trying random generated inputs...")
-
-fuzzer = randomFuzzer(binary)
-fuzzer.fuzz()
-success = success or fuzzer.success
 if not success:
-    print("##########Couldn't crash program :(")
+    print("Couldn't crash program :(")
 else:
-    print("##########Managed to crash program :)")
+    print("Managed to crash program :)")

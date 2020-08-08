@@ -12,10 +12,11 @@ context.log_level = 'warn'
 
 class fuzzerClass:
 
-    def __init__(self, binary, data, makePayload):
+    def __init__(self, binary, data, makePayload, name):
         self.binary = binary
         self.data = data
         self.makePayload = makePayload
+        self.name = name
         self.success = False
 
     def fuzz(self):
