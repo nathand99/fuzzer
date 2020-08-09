@@ -34,6 +34,10 @@ class txtFuzzer(fuzzerClass):
             if self.usePayload(re.sub(r"\d+", "{}".format(r), self.data)):
                 return
 
+    def extendLines(self):
+        print("===>Trying extend lines")
+        self.usePayload(re.sub(r"\n", "A" * 0x100 + "\n", self.data))
+
     def repeat(self):
         print("===>Trying repeat input")
         d = self.data
