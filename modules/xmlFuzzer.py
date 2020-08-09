@@ -5,7 +5,7 @@ import copy
 
 #Refer to csv fuzzer for idea of whats supposed to happen
 def makePayload(d):
-    return ET.tostring(d)
+    return ET.tostring(d).decode()
 
 class xmlFuzzer(fuzzerClass):
 
@@ -18,18 +18,16 @@ class xmlFuzzer(fuzzerClass):
         print("===>Trying extend XML with padding elements")
         d = copy.deepcopy(self.data)
         padding = ET.Element('a')
-        padding.text = "A"
-        for _ in range(0x900):
+        for _ in range(0x100):
             d.append(padding)
         self.usePayload(d)
 
     def lotsOfNested(self):
         print("===>Trying lots of nested elements")
         d = copy.deepcopy(self.data)
-        elem = ET.Element('div')
-        for _ in range(0x300):
+        elem = ET.Element('a')
+        for _ in range(0x100):
             new = ET.Element('a')
-            new.text = "A"
             new.append(elem)
             elem = new
         d.append(elem)
@@ -37,12 +35,12 @@ class xmlFuzzer(fuzzerClass):
 
 
     def greaterMeta(self):
-        self.useDirectPayload(re.sub(b">", b">" * 0x900, self.textData))
+        self.useDirectPayload(re.sub(">", ">" * 0x900, self.textData))
 
     def longTag(self):
         print("===>Trying add long xml tag")
         d = copy.deepcopy(self.data)
-        padding = ET.Element('A' * 0x9000)
+        padding = ET.Element('A' * 0x100)
         d.append(padding)
         self.usePayload(d)
 
