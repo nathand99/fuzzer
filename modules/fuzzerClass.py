@@ -36,14 +36,16 @@ class fuzzerClass:
 
     #Returns the exit code of the process or 0 if process didn't exit
     def sendPayload(self, payload):
+        sentEOF = False
         p = process(self.binary, stdin=PTY, raw=False)
         p.send(payload)
 
         p.wait_for_close(timeout=0.1)
         code = p.poll()
         if code is None:
-            p.send('\x04\x04') #Sending ctrl-d
+            p.send(b'\x04\x04') #Sending ctrl-d
             p.clean(timeout=0.001)
+            sentEOF = True
 
         p.wait_for_close(timeout=0.2)
         code = p.poll()
@@ -52,12 +54,14 @@ class fuzzerClass:
             p.kill()    #Kill proc if doesn't stop on its own
             print("Process did not exit")
         
-        return code
+        return code, sentEOF
 
     #Runs the process with payload and prints if error
     def usePayload(self, data):
         payload = self.makePayload(data)
-        exitCode = self.sendPayload(payload)
+        exitCode, sentEOF = self.sendPayload(payload)
+        if sentEOF:
+            payload += b'\x04\x04'.decode()
         if exitCode < -6:
             self._logPayload(exitCode, payload)
             return True
