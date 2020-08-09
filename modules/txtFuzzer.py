@@ -14,10 +14,10 @@ class txtFuzzer(fuzzerClass):
         print("===>Trying drop meta char")
         for meta in metachars:
             d = "".join(self.data.rsplit(meta, 1))
-            if self.usePayload(d) and self.stopAtFirst:
+            if self.usePayload(d):
                 return
             d = self.data.replace(meta, "", 1)
-            if self.usePayload(d) and self.stopAtFirst:
+            if self.usePayload(d):
                 return
             # d = self.data.replace(meta, "")
             # self.usePayload(d)
@@ -25,8 +25,14 @@ class txtFuzzer(fuzzerClass):
     def numericFuzzer(self):
         print("===>Numeric fuzzing")
         self.usePayload(re.sub(r"(\d+)", r"-\1", self.data))
-        self.usePayload(re.sub(r"\d+", r"0", self.data))
-        self.usePayload(re.sub(r"\d+", r"999999999999", self.data))
+        self.usePayload(re.sub(r"\d+", "0", self.data))
+        self.usePayload(re.sub(r"\d+", "-1", self.data))
+        for _ in range(5):
+            r = random.randint(0, 99999999)
+            if self.usePayload(re.sub(r"\d+", "-{}".format(r), self.data)):
+                return
+            if self.usePayload(re.sub(r"\d+", "{}".format(r), self.data)):
+                return
 
     def repeat(self):
         print("===>Trying repeat input")
