@@ -19,17 +19,28 @@ class xmlFuzzer(fuzzerClass):
         d = copy.deepcopy(self.data)
         padding = ET.Element('a')
         padding.text = "A"
-        for _ in range(0x9000):
+        for _ in range(0x900):
             d.append(padding)
         self.usePayload(d)
 
-    def greaterMeta(self):
-        print(re.sub(r"\>", ">" * 0x900, self.textData))
-        self.useDirectPayload(re.sub(r"\>", ">" * 0x900, self.textData))
+    def lotsOfNested(self):
+        print("===>Trying lots of nested elements")
+        d = copy.deepcopy(self.data)
+        elem = ET.Element('div')
+        for _ in range(0x300):
+            new = ET.Element('a')
+            new.text = "A"
+            new.append(elem)
+            elem = new
+        d.append(elem)
+        self.usePayload(d)
 
+
+    def greaterMeta(self):
+        self.useDirectPayload(re.sub(b">", b">" * 0x900, self.textData))
 
     def longTag(self):
-        print("===>Trying extend XML with padding elements")
+        print("===>Trying add long xml tag")
         d = copy.deepcopy(self.data)
         padding = ET.Element('A' * 0x9000)
         d.append(padding)

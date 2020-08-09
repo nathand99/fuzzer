@@ -13,14 +13,21 @@ class txtFuzzer(fuzzerClass):
     def dropMeta(self):
         print("===>Trying drop meta char")
         for meta in metachars:
-            d = "".join(self.data.rsplit(meta, 1))
-            if self.usePayload(d):
-                return
+            # d = "".join(self.data.rsplit(meta, 1))
+            # if self.usePayload(d):
+            #     return
             d = self.data.replace(meta, "", 1)
-            if self.usePayload(d):
-                return
+            self.usePayload(d)
             # d = self.data.replace(meta, "")
             # self.usePayload(d)
+
+    def addFormatString(self):
+        print("===>Trying insert format string")
+        if self.usePayload(re.sub(r"\".*?\"", "\"%s%p%x%n\"", self.data)):
+            return
+        if self.usePayload(re.sub(r"\<.*?\>", "<%s%p%x%n>", self.data)):
+            return
+        self.usePayload(re.sub(r"(\w+)|(\d+)", "%s%p%x%n", self.data))
 
     def numericFuzzer(self):
         print("===>Numeric fuzzing")

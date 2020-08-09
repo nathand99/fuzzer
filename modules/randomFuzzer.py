@@ -10,6 +10,10 @@ class randomFuzzer(fuzzerClass):
         print("===>Trying spam A")
         self.usePayload(b'A'*0x1000)
 
+    def formatString(self):
+        print("===>Trying send format string")
+        self.usePayload(b'%p%s%x%n'*0x50)
+
     def empty(self):
         print("===>Trying send empty")
         self.usePayload(b'')

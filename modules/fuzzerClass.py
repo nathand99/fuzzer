@@ -73,7 +73,7 @@ class fuzzerClass:
         exitCode, sentEOF = self.sendPayload(payload)
         if exitCode < -6:
             if sentEOF:
-                if type(payload) == 'str':
+                if type(payload) == str:
                     payload += b'\x04\x04'.decode()
                 else:
                     payload += b'\x04\x04'
