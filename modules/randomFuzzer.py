@@ -6,6 +6,10 @@ class randomFuzzer(fuzzerClass):
         super(randomFuzzer,self).__init__(binary, None, lambda x: x, "Random Generated Inputs", stopAtFirst)
 
     #Fuzzing Techniques
+    def spam(self):
+        print("===>Trying spam A")
+        self.usePayload(b'A'*0x1000)
+
     def empty(self):
         print("===>Trying send empty")
         self.usePayload(b'')
