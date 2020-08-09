@@ -17,7 +17,7 @@ def parseFile(file):
     except:
         file.seek(0)
         try:
-            data = ElementTree.parse(file)
+            data = ElementTree.parse(file).getroot()
             t = 'xml'
         except:
             file.seek(0)

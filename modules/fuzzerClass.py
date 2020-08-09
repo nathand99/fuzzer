@@ -56,13 +56,27 @@ class fuzzerClass:
         
         return code, sentEOF
 
+    def useDirectPayload(self, data):
+        exitCode, sentEOF = self.sendPayload(data)
+        if exitCode < -6:
+            if sentEOF:
+                if type(payload) == 'str':
+                    payload += b'\x04\x04'.decode()
+                else:
+                    payload += b'\x04\x04'
+            self._logPayload(exitCode, payload)
+            return True
+
     #Runs the process with payload and prints if error
     def usePayload(self, data):
         payload = self.makePayload(data)
         exitCode, sentEOF = self.sendPayload(payload)
-        if sentEOF:
-            payload += b'\x04\x04'.decode()
         if exitCode < -6:
+            if sentEOF:
+                if type(payload) == 'str':
+                    payload += b'\x04\x04'.decode()
+                else:
+                    payload += b'\x04\x04'
             self._logPayload(exitCode, payload)
             return True
 
