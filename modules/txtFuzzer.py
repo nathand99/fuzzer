@@ -2,7 +2,7 @@ from .fuzzerClass import fuzzerClass
 import random
 import re
 
-metachars = ["|", ">", "<", "/", "%", "-", "?", "}", "..", "../", "\""]
+metachars = ["|", ">", "<", "/", "%", ",", "}", ".."]
 
 class txtFuzzer(fuzzerClass):
 
@@ -20,6 +20,10 @@ class txtFuzzer(fuzzerClass):
             self.usePayload(d)
             # d = self.data.replace(meta, "")
             # self.usePayload(d)
+
+    def makeEmpty(self):
+        print("===>Tring remove text")
+        self.usePayload(re.sub(r"(\w+)|(\d+)", "", self.data))
 
     def addFormatString(self):
         print("===>Trying insert format string")

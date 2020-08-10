@@ -15,56 +15,28 @@ class jsonFuzzer(fuzzerClass):
     #Fuzzing Techniques
 
     def emptyObject(self):
-        self.usePayload('\{\}')
+        self.useDirectPayload("{}")
 
-    # fuzz strings
-    def fuzzStrings(self):
-        print("===>Trying string fuzzing")
-        d=copy.deepcopy(self.data)  
-       
-        stringFields = []
-
-        for key in d.keys():
-            if isinstance(d[key], str):
-                stringFields.append(key)
-
-        for field in stringFields:
-            d[field] = ""
-            self.usePayload(d)
-            d[field] = "A"*1000
-            self.usePayload(d)
-            d[field] = "10000000"
-            self.usePayload(d)
-            d[field] = True
-            self.usePayload(d)
-            d[field] = False
-            self.usePayload(d)
-            d[field] = None
-            self.usePayload(d)
-
-    # fuzz list
-    def fuzzList(self):
-        print("===>Trying fuzz lists")
-        d = copy.deepcopy(self.data)  
+    def lotsOfElements(self):
+        print("===>Trying extend JSON with padding elements")
+        d=copy.copy(self.data)  
+        for i in range(0x100):
+            d[i] = "A"
         self.usePayload(d)
-        listFields = []
 
-        for key in d.keys():
-            if isinstance(d[key], list):
-                listFields.append(key)
-        #default length is 12 - give 13
-        for field in listFields:
-            d[field] = []
-            self.usePayload(d)
-            d[field] = ["a"]
-            self.usePayload(d)
-            d[field] = [1]
-            self.usePayload(d)
-            d[field] = [True]
-            self.usePayload(d)
-            d[field] = ["AAAAAAAAAAAAAAAAAAAAAAA"]
-            self.usePayload(d)
-            d[field] = ["A"]*100
-            self.usePayload(d)
-    
+    def lotsOfNested(self):
+        print("===>Trying lots of nested elements")
+        d = copy.copy(self.data)
+        elem = {'A': ''}
+        for _ in range(0x100):
+            new = {}
+            new['A'] = elem
+            elem = new
+        d['A'] = elem
+        self.usePayload(d)
 
+    def longTag(self):
+        print("===>Trying add long JSON tag")
+        d = copy.copy(self.data)
+        d['A'*0x80] = 'A'*0x80
+        self.usePayload(d)
