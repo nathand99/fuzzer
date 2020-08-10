@@ -38,6 +38,13 @@ class txtFuzzer(fuzzerClass):
         self.usePayload(re.sub(r"(\d+)", r"-\1", self.data))
         self.usePayload(re.sub(r"\d+", "0", self.data))
         self.usePayload(re.sub(r"\d+", "-1", self.data))
+        self.usePayload(re.sub(r"\d+", "2147483647", self.data)) # max 32 bit signed int
+        self.usePayload(re.sub(r"\d+", "-2147483648", self.data)) # min 32 bit singed int
+        self.usePayload(re.sub(r"\d+", "4294967295", self.data)) # max 32 bit unsigned int
+        self.usePayload(re.sub(r"\d+", "9223372036854775807", self.data)) # max 64 bit signed int
+        self.usePayload(re.sub(r"\d+", "-9223372036854775808", self.data)) # min 64 bit signed int
+        self.usePayload(re.sub(r"\d+", "18446744073709551615", self.data)) # max 64 bit unsigned int
+
         for _ in range(5):
             r = random.randint(0, 99999999)
             if self.usePayload(re.sub(r"\d+", "-{}".format(r), self.data)):
