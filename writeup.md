@@ -25,7 +25,7 @@ As mentioned above the fuzzer applies some general techniques (using the text fu
 #### General Techniques
 
 - **Length extension:** Possibly the simplest technique, we simply pad out the input with text horizontally (each line) and vertically (whole input).
-- **Format string attack:** This technique involves inserting strings such as "%p%s%x%n" into the input. This targets poorly writen printf statements in the binary and tends to cause a segfault when %s is encountered as  it causes the program to attempt to read a string from the pointer at the current stack location.
+- **Format string attack:** This technique involves inserting strings such as `"%p%s%x%n"` into the input. This targets poorly writen printf statements in the binary and tends to cause a segfault when `"%s"` is encountered as  it causes the program to attempt to read a string from the pointer at the current stack location.
 - **Numeric fuzzing:** In this technique we simply look for numbers in the supplied input and replace them with values that may cause an interal error for example negative numbers, zero, or large positive numbers. This targets programs which have insufficient checking on their inputs, negative numbers in particular are quite useful at finding these errors.
 - **Meta character removing:** We define some general meta characters found across different input types and attempt to remove or replace them.
 - **Byte operations:** The last general technique involves operations on the byte formatted input such as random bit flips and stripping all null characters.
