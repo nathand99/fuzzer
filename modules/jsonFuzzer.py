@@ -1,6 +1,6 @@
 import json
 import copy
-import numbers
+import itertools
 from .fuzzerClass import fuzzerClass
 
 # Convert python object into json string
@@ -40,3 +40,14 @@ class jsonFuzzer(fuzzerClass):
         d = copy.copy(self.data)
         d['A'*0x80] = 'A'*0x80
         self.usePayload(d)
+
+    # Try send each possible subset of fields
+    def fuzzSubsets(self):
+        print("===>Trying each subset of JSON fields")
+        l = self.data.keys()
+        for i in range(0, len(l) + 1):  
+            for subset in itertools.combinations(l, i):
+                d = {}
+                for item in subset:
+                    d[item] = self.data[item]
+                self.usePayload(d)
