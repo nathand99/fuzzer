@@ -41,13 +41,13 @@ class jsonFuzzer(fuzzerClass):
         d['A'*0x80] = 'A'*0x80
         self.usePayload(d)
 
-    # Try send each possible subset of fields
-    def fuzzSubsets(self):
-        print("===>Trying each subset of JSON fields")
-        l = self.data.keys()
-        for i in range(0, len(l) + 1):  
-            for subset in itertools.combinations(l, i):
-                d = {}
-                for item in subset:
-                    d[item] = self.data[item]
-                self.usePayload(d)
+    # # Try send each possible subset of fields
+    # def fuzzSubsets(self):
+    #     print("===>Trying each subset of JSON fields")
+    #     l = self.data.keys()
+    #     for i in range(0, len(l) + 1):  
+    #         for subset in itertools.combinations(l, i):
+    #             d = {}
+    #             for item in subset:
+    #                 d[item] = self.data[item]
+    #             self.usePayload(d)
